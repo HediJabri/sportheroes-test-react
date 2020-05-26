@@ -38,7 +38,7 @@ const ActivityItem = ({
   const credits = Math.floor(points / 5);
 
   return (
-    <AppActivity>
+    <AppActivity data-testid="activity-item">
       <AppActivityInfo>
         <AppActivityInfoIcon type={type}>
           <img alt={type} src={activityInfo.image} />

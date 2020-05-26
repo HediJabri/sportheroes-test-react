@@ -4,11 +4,9 @@ import axios from 'axios';
 
 import ActivityList from './components/ActivityList';
 import LoadMoreButton from './components/LoadMoreButton';
+import ErrorMessage from './components/ErrorMessage';
 
-const API_URL = 'https://api.runningheroes.com';
-const URL = `${API_URL}/v3/users/5411bab0c8e1e7656f4ff291/activities`;
-const DEFAULT_LIMIT = 10;
-const headers = { 'Content-Type': 'Application/json' };
+import { URL, DEFAULT_LIMIT, HEADERS } from './constants.js';
 
 class App extends Component {
   constructor(props) {
@@ -17,6 +15,7 @@ class App extends Component {
       activities: [],
       skip: 0,
       isLoading: true,
+      isError: false,
     };
   }
 
@@ -26,7 +25,7 @@ class App extends Component {
 
   getConfig = () => {
     return {
-      headers,
+      headers: HEADERS,
       params: {
         limit: DEFAULT_LIMIT,
         sort: '-date',
@@ -47,24 +46,29 @@ class App extends Component {
         this.setState({ activities, skip, isLoading: false });
       })
       .catch(() => {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, isError: true });
       });
   };
 
   render() {
-    const { activities, isLoading } = this.state;
+    const { activities, isLoading, isError } = this.state;
     const displayButton = activities.length > 0;
+
     return (
       <AppPage>
         <AppHeader>Activités</AppHeader>
-        <AppContent>
-          <ActivityList activities={activities} />
-          <LoadMoreButton
-            onClick={() => this.fetchActivities}
-            isLoading={isLoading}
-            display={displayButton}
-          />
-        </AppContent>
+        {isError ? (
+          <ErrorMessage />
+        ) : (
+          <AppContent>
+            <ActivityList activities={activities} />
+            <LoadMoreButton
+              onClick={() => this.fetchActivities}
+              isLoading={isLoading}
+              display={displayButton}
+            />
+          </AppContent>
+        )}
       </AppPage>
     );
   }

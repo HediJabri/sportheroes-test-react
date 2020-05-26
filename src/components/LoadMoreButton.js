@@ -1,23 +1,27 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const LoadMoreButton = ({ onClick, isLoading }) => {
   return (
-    <Fragment>
+    <AppLoadMoreContainer>
       {isLoading ? (
-        <AppSpinner>
+        <AppSpinner data-testid="spinner">
           <i className="fa fa-spinner fa-pulse fa-spin" aria-hidden="true" />
         </AppSpinner>
       ) : (
         <AppButton onClick={onClick()}>Voir plus</AppButton>
       )}
-    </Fragment>
+    </AppLoadMoreContainer>
   );
 };
 
 LoadMoreButton.propTypes = {};
 
 export default LoadMoreButton;
+
+const AppLoadMoreContainer = styled.div`
+  height: 40px;
+`;
 
 const AppButton = styled.button`
   display: flex;

@@ -2,6 +2,8 @@
   "name": "hr-test-react",
   "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
     "axios": "^0.19.2",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.15",
