@@ -12,6 +12,12 @@ yarn
 yarn start
 ```
 
+## Lancer les tests
+
+```
+yarn test
+```
+
 ## A garder en tête
 
 - Les composants doivent être découpés de manière à être ré-utilisés (dans une app React Native par exemple).
@@ -33,8 +39,8 @@ Grâce au call API documenté dans `App.js`, créer un feed d'activités simple 
 - Les crédits correspondants (1 crédit = 5 points).
 - Une date dans un format correct ("aujourd'hui" ou "16/10").
 
-### Bonus : 
+### Bonus :
 
 - 🚀 Créer une pagination (par un lien simple ou un infinite scroll) pour voir les activités antérieures.
-- 🤔 Que faire dans ce fichier `App.test.js` ? 
-- 🛍️ Et Redux dans tout ça ? 
+- 🤔 Que faire dans ce fichier `App.test.js` ?
+- 🛍️ Et Redux dans tout ça ?
