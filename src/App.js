@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
 
 import ActivityList from './components/ActivityList';
+import LoadMoreButton from './components/LoadMoreButton';
 
 const API_URL = 'https://api.runningheroes.com';
 const URL = `${API_URL}/v3/users/5411bab0c8e1e7656f4ff291/activities`;
@@ -51,22 +53,47 @@ class App extends Component {
 
   render() {
     const { activities, isLoading } = this.state;
+    const displayButton = activities.length > 0;
     return (
-      <div className="App">
-        <header className="App-header">Activités</header>
-        <div className="App-content">
-          {/* Activity list */}
+      <AppPage>
+        <AppHeader>Activités</AppHeader>
+        <AppContent>
           <ActivityList activities={activities} />
-          {/* Load more button */}
-          {activities.length > 0 && (
-            <button onClick={() => this.fetchActivities()}>
-              {isLoading && <span>...</span>}
-              Load more
-            </button>
-          )}
-        </div>
-      </div>
+          <LoadMoreButton
+            onClick={() => this.fetchActivities}
+            isLoading={isLoading}
+            display={displayButton}
+          />
+        </AppContent>
+      </AppPage>
     );
   }
 }
 export default App;
+
+const AppPage = styled.div`
+  background-color: #f2f5f6;
+  min-height: 100vh;
+`;
+
+const AppHeader = styled.header`
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  color: #acacac;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 20px 0;
+`;
+
+const AppContent = styled.div`
+  padding: 20px 0 40px 0;
+  width: 60%;
+  margin: 0 auto;
+  @media only screen and (max-width: 992px) {
+    width: 70%;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 80%;
+  }
+`;

@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import moment from 'moment';
 import 'moment/locale/fr';
 import _ from 'lodash';
 
-import ActivityItem from './ActivityItem';
+import ActivityItem, { ActivityItemPropType } from './ActivityItem';
+
+const dateFormat = 'dddd Do MMM';
+const today = moment()
+  .startOf('day')
+  .format(dateFormat);
+const yesterday = moment()
+  .subtract(1, 'day')
+  .startOf('day')
+  .format(dateFormat);
 
 const ActivityList = ({ activities }) => {
   const groupByDay = activities => {
@@ -13,42 +23,42 @@ const ActivityList = ({ activities }) => {
     );
   };
   const getActivityDay = date => {
-    const formatedDate = moment(new Date(date).toISOString()).format(
-      'dddd Do MMM',
-    );
-    const today = moment()
-      .startOf('day')
-      .format('dddd Do MMM');
-    const yesterday = moment()
-      .subtract(1, 'day')
-      .startOf('day')
-      .format('dddd Do MMM');
-    if (formatedDate === today) return "Aujourd'hui";
-    if (formatedDate === yesterday) return 'Hier';
-    return formatedDate;
+    date = moment(new Date(date).toISOString()).format(dateFormat);
+    if (date === today) return "Aujourd'hui";
+    if (date === yesterday) return 'Hier';
+    return date;
   };
   const activitiesGrouped = groupByDay(activities);
   const activitiesDays = Object.keys(activitiesGrouped);
   return (
-    <div className="App-activities-list">
+    <Fragment>
       {activitiesDays.map(activitiesDay => {
         return (
-          <div className={'App-activities'} key={activitiesDay}>
-            {getActivityDay(activitiesDay)} <br />
+          <AppActivityGroup key={activitiesDay}>
+            <AppActivityDate>{getActivityDay(activitiesDay)}</AppActivityDate>
             {activitiesGrouped[activitiesDay].map(activity => {
               return <ActivityItem key={activity._id} activity={activity} />;
             })}
-            <br />
-            <br />
-          </div>
+          </AppActivityGroup>
         );
       })}
-    </div>
+    </Fragment>
   );
 };
 
 ActivityList.propTypes = {
-  activities: PropTypes.array.isRequired,
+  activities: PropTypes.arrayOf(ActivityItemPropType).isRequired,
 };
 
 export default ActivityList;
+
+const AppActivityGroup = styled.div`
+  padding-bottom: 20px;
+`;
+const AppActivityDate = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #acacac;
+  margin-bottom: 10px;
+`;
