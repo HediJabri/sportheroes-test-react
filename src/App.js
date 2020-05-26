@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import moment from 'moment';
-import 'moment/locale/fr';
-import _ from 'lodash';
+
+import ActivityList from './components/ActivityList';
 
 const API_URL = 'https://api.runningheroes.com';
 const URL = `${API_URL}/v3/users/5411bab0c8e1e7656f4ff291/activities`;
@@ -23,12 +22,6 @@ class App extends Component {
     this.fetchActivities(this.state.skip);
   }
 
-  groupByDay = activities => {
-    return _.groupBy(activities, activity =>
-      moment(activity.date).startOf('day'),
-    );
-  };
-
   getConfig = () => {
     return {
       headers,
@@ -40,21 +33,7 @@ class App extends Component {
       },
     };
   };
-  getActivityDay(date) {
-    const formatDate = moment(new Date(date).toISOString()).format(
-      'dddd Do MMM',
-    );
-    const today = moment()
-      .startOf('day')
-      .format('dddd Do MMM');
-    const yesterday = moment()
-      .subtract(1, 'day')
-      .startOf('day')
-      .format('dddd Do MMM');
-    if (formatDate === today) return "Aujourd'hui";
-    if (formatDate === yesterday) return 'Hier';
-    return formatDate;
-  }
+
   fetchActivities = () => {
     this.setState({ isLoading: true });
     const config = this.getConfig();
@@ -72,25 +51,14 @@ class App extends Component {
 
   render() {
     const { activities, isLoading } = this.state;
-    const activitiesGrouped = this.groupByDay(activities);
-    const activitiesDays = Object.keys(activitiesGrouped);
     return (
       <div className="App">
         <header className="App-header">Activités</header>
         <div className="App-content">
           {/* Activity list */}
-          {activitiesDays.map(activitiesDay => {
-            return (
-              <div className={'App-activities'} key={activitiesDay}>
-                {this.getActivityDay(activitiesDay)} <br />
-                {activitiesGrouped[activitiesDay].map(activity => {
-                  return <div key={activity.id}> - {activity.type}</div>;
-                })}
-              </div>
-            );
-          })}
+          <ActivityList activities={activities} />
           {/* Load more button */}
-          {activitiesDays.length > 0 && (
+          {activities.length > 0 && (
             <button onClick={() => this.fetchActivities()}>
               {isLoading && <span>...</span>}
               Load more
