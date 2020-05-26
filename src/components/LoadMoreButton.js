@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const LoadMoreButton = ({ onClick, isLoading }) => {
+const LoadMoreButton = ({ onClick, isPending, display }) => {
+  if (!display) return null;
   return (
     <AppLoadMoreContainer>
-      {isLoading ? (
+      {isPending ? (
         <AppSpinner data-testid="spinner">
           <i className="fa fa-spinner fa-pulse fa-spin" aria-hidden="true" />
         </AppSpinner>
@@ -15,7 +17,11 @@ const LoadMoreButton = ({ onClick, isLoading }) => {
   );
 };
 
-LoadMoreButton.propTypes = {};
+LoadMoreButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  isPending: PropTypes.bool,
+  display: PropTypes.bool,
+};
 
 export default LoadMoreButton;
 

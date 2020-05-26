@@ -7,11 +7,11 @@ export const defaultParams = {
   skip: 0,
 };
 
-export function createFakeActivities(length, prefixId) {
+export function createFakeActivities(limit, skip) {
   let results = [];
-  for (var i = 0; i < length; i++) {
+  for (var i = 0; i < limit; i++) {
     results.push({
-      _id: prefixId + i,
+      _id: `${i}-${skip.toString()}`,
       distance: 3015,
       duration: 687,
       points: 31,
@@ -20,5 +20,10 @@ export function createFakeActivities(length, prefixId) {
       type: 'Running',
     });
   }
-  return { results };
+  return {
+    data: {
+      results,
+      metaData: { skip, total: 2000 },
+    },
+  };
 }
